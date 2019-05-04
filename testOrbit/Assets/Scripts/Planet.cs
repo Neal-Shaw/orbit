@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Planet : MonoBehaviour
 {
+    public enum planet_image{
+        apple, ball8, ball13, donut, blue_peach, burger, earth,
+        mars, mercury, moon, peach, pig
+    }
+
     public float planetSize;
     public float gravityScale;
     // m*v^2/r = GMm/r^2 -> v = sqrt(GM/r) -> GM = gravityScale
@@ -48,7 +53,7 @@ public class Planet : MonoBehaviour
             return -1;
         }
 
-        imageName = "tempPlanet";
+        imageName = ((planet_image)Random.Range(0,11)).ToString("F");
         return 0;
     }
 

@@ -36,6 +36,7 @@ public class PlanetManager : MonoBehaviour
         thisPlanet.firstPlanet();
         newPlanet.transform.localScale = new Vector3(thisPlanet.planetSize, thisPlanet.planetSize, 1f);
         newPlanet.transform.position = new Vector3(thisPlanet.centerX, thisPlanet.centerY, 0f);
+        newPlanet.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("planet_image/earth");
         planetList.Add(thisPlanet);
     }
 
@@ -57,6 +58,7 @@ public class PlanetManager : MonoBehaviour
             {
                 newPlanet.transform.localScale = new Vector3(thisPlanet.planetSize, thisPlanet.planetSize, 1f);
                 newPlanet.transform.position = new Vector3(thisPlanet.centerX, thisPlanet.centerY, 0f);
+                newPlanet.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("planet_image/" + thisPlanet.imageName);
                 planetList.Add(thisPlanet);
             }
         }
