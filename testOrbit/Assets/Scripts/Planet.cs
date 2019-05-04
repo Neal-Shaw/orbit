@@ -5,8 +5,8 @@ using UnityEngine;
 public class Planet : MonoBehaviour
 {
     public enum planet_image{
-        apple, ball8, ball13, donut, blue_peach, burger, earth,
-        mars, mercury, moon, peach, pig
+        apple, ball8, ball13, donut, blue_peach, burger, 
+        mars, mercury, moon, peach, pig, earth
     }
 
     public float planetSize;
@@ -53,7 +53,7 @@ public class Planet : MonoBehaviour
             return -1;
         }
 
-        imageName = ((planet_image)Random.Range(0,11)).ToString("F");
+        imageName = ((planet_image)Random.Range(0,10)).ToString("F");
         return 0;
     }
 
