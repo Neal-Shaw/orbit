@@ -12,35 +12,49 @@ public class Planet : MonoBehaviour
     public float offset;
     public float centerX, centerY;
     public string imageName;
+    bool canMake = true;
     private GameObject pc;
 
-    /*
-    public Planet(float _planetSize, float _gravityScale, float _orbitRadius, float _offset, float _centerX, float _centerY, string _imageName)
-    {
-        planetSize = _planetSize;
-        gravityScale = _gravityScale;
-        orbitRadius = _orbitRadius;
-        offset = _offset;
-        centerX = _centerX;
-        centerY = _centerY;
-        imageName = _imageName;
-    }
-    */
+    Camera cam = null;
+    float camHeight, camWidth;
 
-    public void planetInitialize()
+    public int planetInitialize()
     {
-        planetSize = Random.Range(0.1f, 0.3f);
+        cam = Camera.main;
+        camHeight = cam.orthographicSize;
+        camWidth = camHeight * cam.aspect;
+
+        planetSize = Random.Range(0.15f, 0.35f);
         gravityScale = 600f * Mathf.Pow(planetSize, 4.3f);
         orbitRadius = 21.5f * planetSize;
         offset = 10.25f * 0.05f; // r/2 * scale
-        centerX = -12f;// Random.Range(0f, 6f);
-        centerY = 0f;// Random.Range(-3f, 3f); 20
+        int i = 0;
+        while(i++ < 2000)
+        {
+            canMake = true;
+            centerX = Random.Range(cam.transform.position.x - (camWidth + orbitRadius / Mathf.Sqrt(2)), cam.transform.position.x + (camWidth + orbitRadius / Mathf.Sqrt(2)));
+            centerY = Random.Range(cam.transform.position.y - (camHeight + orbitRadius / Mathf.Sqrt(2)), cam.transform.position.y + (camHeight + orbitRadius / Mathf.Sqrt(2)));
+            foreach(var item in PlanetManager.planetList)
+            {
+                if(distv2(new Vector2(item.transform.position.x, item.transform.position.y), new Vector2(centerX, centerY)) < 1.6f * (item.orbitRadius + item.offset + orbitRadius + offset))
+                    canMake = false;
+            }
+            if (canMake)
+                break;
+        }
+        if (i >= 2000)
+        {
+            PlanetManager.canSummon = false;
+            return -1;
+        }
+
         imageName = "tempPlanet";
+        return 0;
     }
 
     public void firstPlanet()
     {
-        planetSize = Random.Range(0.1f, 0.3f);
+        planetSize = Random.Range(0.15f, 0.35f);
         gravityScale = 600f * Mathf.Pow(planetSize, 4.3f);
         orbitRadius = 21.5f * planetSize;
         offset = 10.25f * 0.05f; // r/2 * scale
@@ -53,24 +67,41 @@ public class Planet : MonoBehaviour
     void Start()
     {
         pc = GameObject.Find("pc");
+        cam = Camera.main;
+        camHeight = cam.orthographicSize;
+        camWidth = camHeight * cam.aspect;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (this != PCManager.currentPlanet)
+        cam = Camera.main;
+        camHeight = cam.orthographicSize;
+        camWidth = camHeight * cam.aspect;
+
+        if (Mathf.Abs(centerX - cam.transform.position.x) > camWidth + orbitRadius / Mathf.Sqrt(2) && Mathf.Abs(centerY - cam.transform.position.y) > camHeight + orbitRadius / Mathf.Sqrt(2))
         {
-            if (Mathf.Abs(distv2(pc, new Vector2(this.centerX, this.centerY)) - this.orbitRadius) <= offset)
+            Planet removePlanet = null;
+            GameObject removeObject = null;
+            foreach (var item in PlanetManager.planetList)
             {
-                PCManager.currentPlanet = this;
-                PCManager.state = 0;
+                if (item.centerX == centerX && item.centerY == centerY)
+                {
+                    removePlanet = item;
+                    removeObject = GameObject.Find(item.name);
+                }
+            }
+            if (removePlanet.name != "tempPlanet")
+            {
+                PlanetManager.planetList.Remove(removePlanet);
+                Destroy(removeObject);
             }
         }
     }
 
-    float distv2(GameObject _pc, Vector2 _planet)
+    float distv2(Vector2 v1, Vector2 v2)
     {
-        float dist = Mathf.Sqrt(Mathf.Pow(_pc.transform.position.x - _planet.x, 2) + Mathf.Pow(_pc.transform.position.y - _planet.y, 2));
+        float dist = Mathf.Sqrt(Mathf.Pow(v1.x - v2.x, 2) + Mathf.Pow(v1.y - v2.y, 2));
         return dist;
     }
 }
