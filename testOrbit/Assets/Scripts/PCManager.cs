@@ -18,7 +18,7 @@ public class PCManager : MonoBehaviour
     {
         mainCamera = GameObject.Find("Main Camera");
         pc = GameObject.Find("pc");
-        for(int i = 1; i <= 100; i++)
+                for(int i = 1; i <= 100; i++)
         {
             GameObject eb = GameObject.Find("eb (" + i.ToString() + ")");
             eb.transform.localPosition = new Vector3(0.2f * i + 5f, 0f, 1f);
@@ -28,7 +28,7 @@ public class PCManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CharacterMove.energy <= 1)
+           if (CharacterMove.energy <= 1)
             state = 2;
         else
         {
@@ -75,7 +75,7 @@ public class PCManager : MonoBehaviour
             case 1:
                 PlanetManager.canSummon = true;
                 moveVector = new Vector3(-Mathf.Sin(planetAngle), Mathf.Cos(planetAngle), 0f);
-                float speedWeight = 1f;
+                 float speedWeight = 1f;
                 pc.transform.position += Time.deltaTime * moveSpeed * currentPlanet.orbitRadius * deltaAngle * moveVector * speedWeight;
                 mainCamera.transform.position += Time.deltaTime * moveSpeed * currentPlanet.orbitRadius * deltaAngle * moveVector * speedWeight;
 
@@ -91,16 +91,21 @@ public class PCManager : MonoBehaviour
                         if (Mathf.Abs(distv2(new Vector2(pc.transform.position.x, pc.transform.position.y), new Vector2(item.centerX, item.centerY)) - item.orbitRadius) <= item.offset)
                         {
                             PCManager.currentPlanet = item;
-                            Vector2 inputVector = new Vector2(pc.transform.position.x, pc.transform.position.y) - new Vector2(PCManager.currentPlanet.centerX, PCManager.currentPlanet.centerY);
+                                                        Vector2 inputVector = new Vector2(pc.transform.position.x, pc.transform.position.y) - new Vector2(PCManager.currentPlanet.centerX, PCManager.currentPlanet.centerY);
                             planetAngle = Mathf.Atan2(inputVector.y, inputVector.x);
-                            PCManager.state = 0;
-                            CharacterMove.energy += PCManager.currentPlanet.planetSize * 40f;
-                            check = false;
+                            if(currentPlanet.planet_type == 0)
+                            {
+                                PCManager.state = 0;
+                                CharacterMove.energy += PCManager.currentPlanet.planetSize * 40f;
+                                check = false;
+                            }
+                            else
+                                PCManager.state = 2;
                         }
                     }
                 }
                 break;
-            case 2:
+            case 2:                
                 break;
             default:
                 break;

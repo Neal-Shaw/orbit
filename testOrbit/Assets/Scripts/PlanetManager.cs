@@ -24,6 +24,12 @@ public class PlanetManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        foreach(Planet item in planetList)
+        {
+            if(item.imageName == "blackhole")
+                item.transform.Rotate(-Vector3.forward * 150f * Time.deltaTime);
+        }
+
         if(PCManager.state == 0)
             summonPlanet();
     }

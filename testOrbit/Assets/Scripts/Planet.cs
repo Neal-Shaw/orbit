@@ -5,10 +5,10 @@ using UnityEngine;
 public class Planet : MonoBehaviour
 {
     public enum planet_image{
-        apple, ball8, ball13, donut, blue_peach, burger, 
-        mars, mercury, peach, pig, earth
+        apple, ball8, ball13, donut, blue_peach, burger, mars, mercury, peach, pig, _octo, _tako, earth,
+        solar, blackhole
     }
-
+    public int planet_type;
     public float planetSize;
     public float gravityScale;
     // m*v^2/r = GMm/r^2 -> v = sqrt(GM/r) -> GM = gravityScale
@@ -29,6 +29,11 @@ public class Planet : MonoBehaviour
         camHeight = cam.orthographicSize;
         camWidth = camHeight * cam.aspect;
 
+        if(Random.Range(0,10) < 1)
+            planet_type = 1;
+        else 
+            planet_type = 0;
+    
         planetSize = Random.Range(0.2f, 0.4f);
         gravityScale = 600f * Mathf.Pow(planetSize, 4.4f);
         orbitRadius = 21.5f * planetSize;
@@ -52,8 +57,10 @@ public class Planet : MonoBehaviour
             PlanetManager.canSummon = false;
             return -1;
         }
-
-        imageName = ((planet_image)Random.Range(0,9)).ToString("F");
+        if(planet_type == 0)
+            imageName = ((planet_image)Random.Range(0,12)).ToString("F");
+        else
+            imageName = ((planet_image)Random.Range(13,15)).ToString("F"); 
         return 0;
     }
 
