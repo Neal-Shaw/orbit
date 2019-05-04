@@ -6,7 +6,7 @@ public class Planet : MonoBehaviour
 {
     public enum planet_image{
         apple, ball8, ball13, donut, blue_peach, burger, 
-        mars, mercury, moon, peach, pig, earth
+        mars, mercury, peach, pig, earth
     }
 
     public float planetSize;
@@ -29,19 +29,19 @@ public class Planet : MonoBehaviour
         camHeight = cam.orthographicSize;
         camWidth = camHeight * cam.aspect;
 
-        planetSize = Random.Range(0.15f, 0.35f);
-        gravityScale = 600f * Mathf.Pow(planetSize, 4.3f);
+        planetSize = Random.Range(0.2f, 0.4f);
+        gravityScale = 600f * Mathf.Pow(planetSize, 4.4f);
         orbitRadius = 21.5f * planetSize;
         offset = 10.25f * 0.05f; // r/2 * scale
         int i = 0;
         while(i++ < 2000)
         {
             canMake = true;
-            centerX = Random.Range(cam.transform.position.x - (camWidth + orbitRadius / Mathf.Sqrt(2)), cam.transform.position.x + (camWidth + orbitRadius / Mathf.Sqrt(2)));
-            centerY = Random.Range(cam.transform.position.y - (camHeight + orbitRadius / Mathf.Sqrt(2)), cam.transform.position.y + (camHeight + orbitRadius / Mathf.Sqrt(2)));
+            centerX = Random.Range(cam.transform.position.x - (camWidth + orbitRadius / 2), cam.transform.position.x + (camWidth + orbitRadius / 2));
+            centerY = Random.Range(cam.transform.position.y - (camHeight + orbitRadius / 2), cam.transform.position.y + (camHeight + orbitRadius / 2));
             foreach(var item in PlanetManager.planetList)
             {
-                if(distv2(new Vector2(item.transform.position.x, item.transform.position.y), new Vector2(centerX, centerY)) < 1.6f * (item.orbitRadius + item.offset + orbitRadius + offset))
+                if(distv2(new Vector2(item.transform.position.x, item.transform.position.y), new Vector2(centerX, centerY)) < 1.4f * (item.orbitRadius + item.offset + orbitRadius + offset))
                     canMake = false;
             }
             if (canMake)
@@ -53,7 +53,7 @@ public class Planet : MonoBehaviour
             return -1;
         }
 
-        imageName = ((planet_image)Random.Range(0,10)).ToString("F");
+        imageName = ((planet_image)Random.Range(0,9)).ToString("F");
         return 0;
     }
 
